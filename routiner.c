@@ -443,7 +443,7 @@ void filter_teachers(int *ty_id, int d, int sec, int p) {
 
 int get_gpc(int *ty_id, int d) {
     int index = 0, i, j;
-    double pc[20][4], _pc[20], pc1;
+    double pc[20][4], _pc;
     struct type *ty;
     struct teacher *t;
 
@@ -456,27 +456,24 @@ int get_gpc(int *ty_id, int d) {
             }
             t = get_teacher(ty->t_id[j]);
             if(t != NULL) {
-                pc[i][j]= calculate_pc(ty->id, ty->t_id[j], d, ty->sec_id);
+                pc[i][j] = calculate_pc(ty->id, ty->t_id[j], d, ty->sec_id);
             } else {
                 pc[i][j] = 0;
             }
         }
     }
 		
-	for(i = 0;i < 20;i++) {
-		for(j = 0;j < 4;j++) {
-			_pc[i] += pc[i][j];
-		}
-	}
 	
-	pc1 = _pc[0];
-		
-	for(i = 1;i < 20;i++) {
-		if(_pc[i] > pc1) {
-			pc1 = _pc[i];
-			index = i;
+	_pc = pc[0][0];
+	
+	for(i = 0;i < 20;i++) {
+		for(j = 0;i < 4;j++) {
+			if(pc[i][j] > _pc) {
+				_pc = pc[i][j];
+				index = i;
+			}
 		}
-	}
+	}	
 
     return *(ty_id+index);
 }
