@@ -467,7 +467,7 @@ int get_gpc(int *ty_id, int d) {
 	_pc = pc[0][0];
 	
 	for(i = 0;i < 20;i++) {
-		for(j = 0;i < 4;j++) {
+		for(j = 0;j < 4;j++) {
 			if(pc[i][j] > _pc) {
 				_pc = pc[i][j];
 				index = i;
