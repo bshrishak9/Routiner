@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "obs.h"
+#include "routiner.h"
 
 char routine[7][13][9][30];
 
@@ -237,6 +237,8 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
         }
         free(prac_per_day);
     }
+
+	//Generating python dictionary using 4 dimensional array.
     
     static PyObject *rt;
     static PyObject *d;
@@ -441,7 +443,7 @@ void filter_teachers(int *ty_id, int d, int sec, int p) {
 
 int get_gpc(int *ty_id, int d) {
     int index = 0, i, j;
-    double pc[20][4], _pc;
+    double pc[20][4], _pc[20], pc1;
     struct type *ty;
     struct teacher *t;
 
@@ -460,16 +462,21 @@ int get_gpc(int *ty_id, int d) {
             }
         }
     }
-
-    _pc = pc[0][0];
-    for(i = 0;i < 20;i++) {
-        for(j = 0;j < 4;j++) {
-            if(pc[i][j] > _pc) {
-                _pc = pc[i][j];
-                index = i;
-            }
-        }
-    }
+		
+	for(i = 0;i < 20;i++) {
+		for(j = 0;j < 4;j++) {
+			_pc[i] += pc[i][j];
+		}
+	}
+	
+	pc1 = _pc[0];
+		
+	for(i = 1;i < 20;i++) {
+		if(_pc[i] > pc1) {
+			pc1 = _pc[i];
+			index = i;
+		}
+	}
 
     return *(ty_id+index);
 }
