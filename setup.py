@@ -1,18 +1,17 @@
 from distutils.core import setup, Extension
 
 routiner = Extension('pyroutiner',
-                    sources = ['main.c', 'routiner.c'],
-                    swig_opts=['-modern', '/B'],
+                    sources = ['pyrt.c', 'pyrtr.c'],
                     )
 
 setup (name = 'pyroutiner',
-       version = '1.0.2',
+       version = '1.3.0',
        author='Shrishak Bhattarai',
        author_email='bshrishak9@gmail.com',
        url='https://github.com/bshrishak9/Routiner',
        description = 'Routine Generating Algorithm',
        classifiers=[
-       "Programming Language :: Python :: 3", 
+       "Programming Language :: Python :: Implementation :: CPython", 
        'License :: OSI Approved :: Apache Software License',
         "Operating System :: OS Independent",
        ],

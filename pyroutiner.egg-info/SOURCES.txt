@@ -1,6 +1,8 @@
 LICENSE
-README.md
+README
 main.c
+pyrt.c
+pyrtr.c
 routiner.c
 setup.py
 pyroutiner.egg-info/PKG-INFO

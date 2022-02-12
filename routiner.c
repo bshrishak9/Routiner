@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "routiner.h"
+#include "./main.h"
 
 char routine[7][13][9][30];
 
