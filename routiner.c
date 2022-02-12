@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./main.h"
+#include "routiner.h"
 
 char routine[7][13][9][30];
 
@@ -479,6 +479,11 @@ int get_gpc(int *ty_id, int d, int sec) {
 }
 
 double calculate_pc(int ty_id, int t_id, int d, int sec) {
+
+    /*
+    * Na = number of periods teacher available in week.
+    *
+    */
     unsigned short Ns = 0, Na = 0, Nd = 0, Nt = 0, Nts = 0, Nsd = 0, Nty = 0, i, j;
     double Ac, Sc, Dc, Tc, TSc, SDc;
 
@@ -507,16 +512,13 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
 	if(Ns == 0) {
 		return 0;
 	}
-    for(i = 1;i < 7;i++) {
+    for(i = d;i < 7;i++) {
         for(j = 1;j < 9;j++) {
             if(is_day_period_able(t_id, i, j)) {
                 Na++;
             }
         }
     }
-	if(Na == 0) {
-		return 0;
-	}
 	
 	j = 0;	
 
@@ -524,16 +526,19 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
 		t = get_teacher(ty->t_id[i]);
 		if(t != NULL) {
 			j++;
-		}
+		} else {    
+            break;  
+        }
 	}
 	
-	char *subject = calloc(11, sizeof(char));
+	char subject[30];
 
-    for(i = 1;i < 9;i++) {
+    for(i = 8;i > 1;i--) {
         if(is_day_period_able(t_id, d, i)) {
             Nd++;
         }
-		subject = strtok(routine[d][sec][i], "+");
+		strcpy(subject, routine[d][sec][i]);
+        strtok(subject, "+");
 		if(strcmp(subject, s->sub_name) == 0) {
 			Nsd++;
 		}
@@ -541,7 +546,7 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
 
 	Nts = ty->n_prds;
 
-	if(Nd == 0 || Nt == 0 || Nts == 0 || Nsd == 0 || Nty == 0) {
+	if(Na == 0|| Nd == 0 || Nt == 0 || Nts == 0 || Nty == 0 || Nsd == 0) {
 		return 0;
 	}
 	

@@ -1,11 +1,11 @@
 from distutils.core import setup, Extension
 
 routiner = Extension('pyroutiner',
-                    sources = ['pyrt.c', 'pyrtr.c'],
+                    sources = ['main.c', 'routiner.c'],
                     )
 
 setup (name = 'pyroutiner',
-       version = '1.3.0',
+       version = '1.3.1',
        author='Shrishak Bhattarai',
        author_email='bshrishak9@gmail.com',
        url='https://github.com/bshrishak9/Routiner',
