@@ -442,8 +442,9 @@ void filter_teachers(int *ty_id, int d, int sec, int p) {
 }
 
 int get_gpc(int *ty_id, int d, int sec) {
-    int index = 0, i, j;
+    int ind = 0, i, j;
     double pc[20][4], _pc;
+
     struct type *ty;
     struct teacher *t;
 
@@ -452,44 +453,58 @@ int get_gpc(int *ty_id, int d, int sec) {
         for(j = 0;j < 4;j++) {
             if(ty == NULL) {
                 pc[i][j] = 0;
-                continue;
-            }
-            t = get_teacher(ty->t_id[j]);
-            if(t != NULL) {
-                pc[i][j] = calculate_pc(ty->id, ty->t_id[j], d, sec);
             } else {
-                pc[i][j] = 0;
-            }
+            	t = get_teacher(ty->t_id[j]);
+            	if(t != NULL) {
+                	pc[i][j] = calculate_pc(ty->id, ty->t_id[j], d, sec);
+            	} else {
+                	pc[i][j] = 0;
+            	}
+			}
         }
     }
-		
-	
+
 	_pc = pc[0][0];
-	
 	for(i = 0;i < 20;i++) {
 		for(j = 0;j < 4;j++) {
 			if(pc[i][j] > _pc) {
 				_pc = pc[i][j];
-				index = i;
-			}
+				ind = i;
+			}	
+		}	
+	}
+/*	
+	for(i = 0;i < 20;i++) {
+		_pc[i] = 0;
+		for(j = 0;j < 4;j++) {
+			_pc[i] += pc[i][j];
 		}
 	}	
-
-    return *(ty_id+index);
+	
+	_pc1 = _pc[0];
+	
+	for(i = 1;i < 20;i++) {
+		if(_pc[i] > _pc1) {
+			_pc1 = _pc[i];
+			index = i;
+		}
+	}
+*/
+    return *(ty_id+ind);
 }
 
 double calculate_pc(int ty_id, int t_id, int d, int sec) {
 
     /*
-    * Na = number of periods teacher available in week.
+    * Na = number of periods teacher available per week.
+	* Ns = number of periods a teacher must teacher per week.
     *
     */
     unsigned short Ns = 0, Na = 0, Nd = 0, Nt = 0, Nts = 0, Nsd = 0, Nty = 0, i, j;
-    double Ac, Sc, Dc, Tc, TSc, SDc;
+    double Ac, Dc, Tc, TSc, SDc;
 
     struct type *ty;
     struct subject *s;
-	struct teacher *t;
     
     ty = get_type(ty_id);
     s = get_subject(ty->s_id);
@@ -497,7 +512,11 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
     for(i = 0;i < type_n;i++) {
         if((ty_a+i)->sec_id == ty->sec_id && (ty_a+i)->s_id == ty->s_id) {
             Nt += (ty_a+i)->n_prds;
-			Nty++;
+			if((ty_a+i)->is_practical) {
+				Nty += 2;
+			} else {
+				Nty++;
+			}
         }
 
 
@@ -508,37 +527,26 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
                 break;
             }
         }
-    }
-	if(Ns == 0) {
-		return 0;
 	}
-    for(i = d;i < 7;i++) {
+
+    for(i = 1;i < 7;i++) {
         for(j = 1;j < 9;j++) {
             if(is_day_period_able(t_id, i, j)) {
                 Na++;
             }
         }
     }
-	
-	j = 0;	
 
-	for(i = 0;i < 4;i++) {
-		t = get_teacher(ty->t_id[i]);
-		if(t != NULL) {
-			j++;
-		} else {    
-            break;  
-        }
-	}
-	
 	char subject[30];
 
-    for(i = 8;i > 1;i--) {
+    for(i = 8;i > 0;i--) {
         if(is_day_period_able(t_id, d, i)) {
             Nd++;
         }
+
 		strcpy(subject, routine[d][sec][i]);
         strtok(subject, "+");
+
 		if(strcmp(subject, s->sub_name) == 0) {
 			Nsd++;
 		}
@@ -546,23 +554,19 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
 
 	Nts = ty->n_prds;
 
-	if(Na == 0|| Nd == 0 || Nt == 0 || Nts == 0 || Nty == 0 || Nsd == 0) {
+	if(Na == 0|| Nd == 0 || Nt == 0 || Nty == 0) {
 		return 0;
 	}
 	
-	if(ty->is_practical) {
-		Nt *= j;
-	}
 
-	Ac = (double)Na;
-	Sc = (double)Ns;
-	Dc = 8/(double)Nd;
-	SDc = (double)Nty/Nsd;
+	Ac = (double)Ns/Na;
+	Dc = (double)1/Nd;
+	SDc = (double)(Nty-Nsd)/Nty;
 
     Tc = (double)Nt/(s->n_period);
 	TSc = (double)Nts/ty->n_prds_o;
 
-    return (Ac * Sc * Tc * Dc * TSc * SDc);
+    return (Ac * Tc * Dc * TSc * SDc);
 }
 
 unsigned int check_practical_teacher(int id, int d, int p, char* _period) {
