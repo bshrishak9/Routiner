@@ -161,7 +161,7 @@ void load_data() {
         strcpy(routine[i][0][0], days[i-1]);
     }
 
-    static char class[10];
+    char class[10];
     for(i = 1;i < 13;i++) {
         strcpy(class, (sec_a+i-1)->sec_name);
         strcat(class, "_");
@@ -187,6 +187,15 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
     struct type* ty;
 
     char period[30];
+	
+	for(day = 1;day < 7;day++) {
+		for(sec = 1;sec < 13;sec++) {
+			filter_practical_teachers(sec);
+			for(prd = 8;prd > 0;prd--) {
+
+			}
+		}
+	}
 
     for(day = 1;day < 7;day++) {
         prac_per_day = calloc(12, sizeof(int));
@@ -299,7 +308,7 @@ void cut_day_t(int t_id, int d, int k) {
 }
 
 void cut_all_day_t(int day, int prd) {
-    for(int i = 0;i< teacher_n * 6;i++) {
+    for(int i = 0;i < teacher_n * 6;i++) {
         if(strcmp((dt_a+i)->day_name, days[day-1]) == 0) {
             (dt_a+i)->periods[prd-1] = False;
         }
@@ -441,7 +450,7 @@ void filter_teachers(int *ty_id, int d, int sec, int p) {
     }
 }
 
-int get_gpc(int *ty_id, int d, int sec) {
+int get_gpc(int *ty_id, int day, int sec) {
     int ind = 0, i, j;
     double pc[20][4], _pc;
 
@@ -456,7 +465,7 @@ int get_gpc(int *ty_id, int d, int sec) {
             } else {
             	t = get_teacher(ty->t_id[j]);
             	if(t != NULL) {
-                	pc[i][j] = calculate_pc(ty->id, ty->t_id[j], d, sec);
+                	pc[i][j] = calculate_pc(ty->id, ty->t_id[j], day, sec);
             	} else {
                 	pc[i][j] = 0;
             	}
@@ -493,7 +502,7 @@ int get_gpc(int *ty_id, int d, int sec) {
     return *(ty_id+ind);
 }
 
-double calculate_pc(int ty_id, int t_id, int d, int sec) {
+double calculate_pc(int ty_id, int t_id, int day, int sec) {
 
     /*
     * Na = number of periods teacher available per week.
@@ -540,11 +549,11 @@ double calculate_pc(int ty_id, int t_id, int d, int sec) {
 	char subject[30];
 
     for(i = 8;i > 0;i--) {
-        if(is_day_period_able(t_id, d, i)) {
+        if(is_day_period_able(t_id, day, i)) {
             Nd++;
         }
 
-		strcpy(subject, routine[d][sec][i]);
+		strcpy(subject, routine[day][sec][i]);
         strtok(subject, "+");
 
 		if(strcmp(subject, s->sub_name) == 0) {
