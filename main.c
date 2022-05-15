@@ -5,10 +5,14 @@
 #include <string.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "routiner.h"
 =======
 #include "obs.h"
 >>>>>>> 6b5101d (cpp and header files created for conversion)
+=======
+#include "obs.h"
+>>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 
 int main(int argc, char *argv[])
 {
