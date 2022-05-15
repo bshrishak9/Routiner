@@ -4,7 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
 #include "routiner.h"
+=======
+#include "obs.h"
+>>>>>>> 6b5101d (cpp and header files created for conversion)
 
 int main(int argc, char *argv[])
 {

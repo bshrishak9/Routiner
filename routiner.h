@@ -44,7 +44,11 @@ unsigned int is_sec_able(int, int);
 unsigned int is_day_period_able(int, int, int);
 
 
+<<<<<<< HEAD
 int get_gpc(int*, int, int);
+=======
+int get_gpc(int*, int);
+>>>>>>> 6b5101d (cpp and header files created for conversion)
 
 void get_type_sec(int*, int);
 void get_periods_dp(int*, int, int, int);
