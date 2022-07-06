@@ -1,5 +1,6 @@
-#include <iostream>
+include <iostream>
 #include "day.h"
+#include "teacher.h"
 
 class Teacher {
 
@@ -11,9 +12,10 @@ private:
 
 	static int s_count;
 
-
 public:
-
+	static TeacherManager manager = new TeacherManager();
+		
+public:
 	Teacher (int id, char *ini, int sub_id, int num_days) {
 		this.id = id;
 		strcpy(this.ini, ini);
@@ -32,7 +34,6 @@ public:
 	}
 
 	char *get_initials() const {
-
 		return this.ini;
 	}
 

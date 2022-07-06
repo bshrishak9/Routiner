@@ -1,22 +1,12 @@
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
 
-#define True 1
-#define False 0
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include "routiner.h"
-=======
 #include "obs.h"
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-#include "obs.h"
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 
 char routine[7][13][9][30];
 
@@ -169,15 +159,8 @@ void load_data() {
         strcpy(routine[i][0][0], days[i-1]);
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     char class[10];
-=======
     static char class[10];
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-    static char class[10];
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
     for(i = 1;i < 13;i++) {
         strcpy(class, (sec_a+i-1)->sec_name);
         strcat(class, "_");
@@ -203,8 +186,6 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
     struct type* ty;
 
     char period[30];
-<<<<<<< HEAD
-<<<<<<< HEAD
 	
 	for(day = 1;day < 7;day++) {
 		for(sec = 1;sec < 13;sec++) {
@@ -214,10 +195,6 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
 			}
 		}
 	}
-=======
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 
     for(day = 1;day < 7;day++) {
         prac_per_day = calloc(12, sizeof(int));
@@ -231,15 +208,7 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
                 get_periods_dps(ty_id, day, (sec_a+sec-1)->id, prd, *(prac_per_day+sec-1));
                 filter_teachers(ty_id, day, sec, prd);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                type_id = get_gpc(ty_id, day, sec);
-=======
-                type_id = get_gpc(ty_id, day);
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-                type_id = get_gpc(ty_id, day);
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
+	              type_id = get_gpc(ty_id, day, sec);
                 ty = get_type(type_id); 
                 
                 if(ty == NULL) {
@@ -276,14 +245,8 @@ static PyObject *mk_rt(PyObject *self, PyObject *args) {
         }
         free(prac_per_day);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 	//Generating python dictionary using 4 dimensional array.
-=======
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
     
     static PyObject *rt;
     static PyObject *d;
@@ -344,15 +307,7 @@ void cut_day_t(int t_id, int d, int k) {
 }
 
 void cut_all_day_t(int day, int prd) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     for(int i = 0;i < teacher_n * 6;i++) {
-=======
-    for(int i = 0;i< teacher_n * 6;i++) {
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-    for(int i = 0;i< teacher_n * 6;i++) {
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
         if(strcmp((dt_a+i)->day_name, days[day-1]) == 0) {
             (dt_a+i)->periods[prd-1] = False;
         }
@@ -492,24 +447,10 @@ void filter_teachers(int *ty_id, int d, int sec, int p) {
     for(i = c;i < 20;i++) {
         *(ty_id+i) = 0;
     }
-}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-int get_gpc(int *ty_id, int day, int sec) {
-    int ind = 0, i, j;
-    double pc[20][4], _pc;
-
-=======
-int get_gpc(int *ty_id, int d) {
+int get_gpc(int *ty_id, int d, int sec) {
     int index = 0, i, j;
     double pc[20][4], _pc;
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-int get_gpc(int *ty_id, int d) {
-    int index = 0, i, j;
-    double pc[20][4], _pc;
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
     struct type *ty;
     struct teacher *t;
 
@@ -518,8 +459,6 @@ int get_gpc(int *ty_id, int d) {
         for(j = 0;j < 4;j++) {
             if(ty == NULL) {
                 pc[i][j] = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
             } else {
             	t = get_teacher(ty->t_id[j]);
             	if(t != NULL) {
@@ -558,46 +497,6 @@ int get_gpc(int *ty_id, int d) {
 	}
 */
     return *(ty_id+ind);
-}
-
-double calculate_pc(int ty_id, int t_id, int day, int sec) {
-
-    /*
-    * Na = number of periods teacher available per week.
-	* Ns = number of periods a teacher must teacher per week.
-    *
-    */
-    unsigned short Ns = 0, Na = 0, Nd = 0, Nt = 0, Nts = 0, Nsd = 0, Nty = 0, i, j;
-    double Ac, Dc, Tc, TSc, SDc;
-
-    struct type *ty;
-    struct subject *s;
-=======
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
-                continue;
-            }
-            t = get_teacher(ty->t_id[j]);
-            if(t != NULL) {
-                pc[i][j]= calculate_pc(ty->id, ty->t_id[j], d, ty->sec_id);
-            } else {
-                pc[i][j] = 0;
-            }
-        }
-    }
-
-    _pc = pc[0][0];
-    for(i = 0;i < 20;i++) {
-        for(j = 0;j < 4;j++) {
-            if(pc[i][j] > _pc) {
-                _pc = pc[i][j];
-                index = i;
-            }
-        }
-    }
-
-    return *(ty_id+index);
-}
 
 double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
     unsigned short Ns = 0, Na = 0, Nd = 0, Nt = 0, Nts = 0, i, j;
@@ -606,17 +505,10 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
     struct type *ty;
     struct subject *s;
 	struct teacher *t;
-<<<<<<< HEAD
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
-    
     ty = get_type(ty_id);
     s = get_subject(ty->s_id);
 
     for(i = 0;i < type_n;i++) {
-<<<<<<< HEAD
-<<<<<<< HEAD
         if((ty_a+i)->sec_id == ty->sec_id && (ty_a+i)->s_id == ty->s_id) {
             Nt += (ty_a+i)->n_prds;
 			if((ty_a+i)->is_practical) {
@@ -626,18 +518,10 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
 			}
         }
 
-
-=======
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
         if((ty_a+i)->sec_id == sec_id && (ty_a+i)->s_id == ty->s_id) {
             Nt += (ty_a+i)->n_prds;
         }
 
-<<<<<<< HEAD
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
         for(j = 0;j < 4;j++) {
 
             if((ty_a+i)->t_id[j] == t_id) {
@@ -645,15 +529,6 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
                 break;
             }
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-	}
-=======
-    }
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-    }
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 
     for(i = 1;i < 7;i++) {
         for(j = 1;j < 9;j++) {
@@ -662,9 +537,6 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
             }
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 	char subject[30];
 
     for(i = 8;i > 0;i--) {
@@ -678,9 +550,6 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
 		if(strcmp(subject, s->sub_name) == 0) {
 			Nsd++;
 		}
-=======
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 	
 	j = 0;	
 
@@ -695,16 +564,9 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
         if(is_day_period_able(t_id, d, i)) {
             Nd++;
         }
-<<<<<<< HEAD
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
     }
 
 	Nts = ty->n_prds;
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 	if(Na == 0|| Nd == 0 || Nt == 0 || Nty == 0) {
 		return 0;
 	}
@@ -713,9 +575,6 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
 	Ac = (double)Ns/Na;
 	Dc = (double)1/Nd;
 	SDc = (double)(Nty-Nsd)/Nty;
-=======
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 	if(Na == 0 || Ns == 0 || Nd == 0 || Nt == 0 || Nts == 0) {
 		return 0;
 	}
@@ -727,23 +586,11 @@ double calculate_pc(int ty_id, int t_id, int d, int sec_id) {
 	Ac = (double)Na;
 	Sc = (double)Ns;
 	Dc = 8/(double)Nd;
-<<<<<<< HEAD
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 
     Tc = (double)Nt/(s->n_period);
 	TSc = (double)Nts/ty->n_prds_o;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return (Ac * Tc * Dc * TSc * SDc);
-=======
     return (Ac * Sc * Tc * Dc * TSc);
->>>>>>> 6b5101d (cpp and header files created for conversion)
-=======
-    return (Ac * Sc * Tc * Dc * TSc);
->>>>>>> 6b5101d6cf104d46833812561f6789f979590619
 }
 
 unsigned int check_practical_teacher(int id, int d, int p, char* _period) {

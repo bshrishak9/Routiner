@@ -1,9 +1,5 @@
 #include "teacher.h"
 
-#define t_num 40
-
-class Teacher* Teachers = (class Teacher*)calloc(t_num, sizeof(class Teacher));
-
 class TeacherManager {
 
 private:
